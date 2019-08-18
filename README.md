@@ -6,7 +6,7 @@ In order to run this webapp, you should have Node installed in yur environment (
 
 Initialise with:
 ```
-node index.js
+node app.js
 ```
 
 The website will be live under localhost:3000
