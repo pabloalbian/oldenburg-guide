@@ -2,13 +2,35 @@
 	<title>Oldenburg Guide</title>
 	<link href='https://api.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" type="text/css" href="../styles/style.css">
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
-	<div id='map'></div>
+  
+
+	<div id='map'>
+		<div id="mySidebar" class="sidebar">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeBar()">&times;</a>
+			<a href="#">Element 1</a>
+			<a href="#">Element 2</a>
+			<a href="#">Element 3</a>
+			<a href="#">Element 4</a>
+		</div>
+
+		<a href="javascript:void(0)" class="showbtn-left" id="showbtn">
+			<i class="fas fa-arrow-right fa-2x"></i>
+		</a>
+
+	</div>
 
 
 
 	<script src='https://api.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/js/all.min.js" integrity="sha256-xzrHBImM2jn9oDLORlHS1/0ekn1VyypEkV1ALvUx8lU=" crossorigin="anonymous"></script>
+	<script
+ 		src="https://code.jquery.com/jquery-3.4.1.min.js"
+  		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  		crossorigin="anonymous"></script>
 	<script src="../scripts/app.js"></script>
+	<script src="../scripts/sidebar.js"></script>
 </body>
