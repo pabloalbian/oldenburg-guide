@@ -4,33 +4,72 @@ body {
 }
 
 .sidebar {
+  font-family: 'Lato', sans-serif;
   height: 100%;
   width: 0;
   position: fixed;
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: white;
+  background-color: #5F6F87;
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 60px;
+  padding-top: 30px;
+  border-right: 2px solid rgba(0, 0, 0, 0.25);
+}
+
+
+.sidebar h1 {
+  position: relative;
+  margin-left: 1em;
+  color: #2C302E;
+  font-weight: 300;
+  font-size: 2.5em;
+}
+
+.sidebar .filter input{
+  width: 80%;
+  height: 2em;
+  margin-bottom: 15px;
+  margin-left: 32px;
+	border:2px solid rgba(255,255,255,.5);
+	color:rgba(244,241,187,.5);
+	border-radius:.25em;
+	background:transparent;
+}
+
+.filter input:focus{
+		outline:none;
+		color:rgba(255,255,255,.75);
+		border-color:rgba(255,255,255,.75);
+}
+
+::placeholder {
+  color: white;
 }
 
 .sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
+  font-weight : 400;
+  font-size: 1.5em;
+  padding: 10px 8px 8px 32px;
+  color: #F4F1BB;
   display: block;
   transition: 0.3s;
 }
 
+.address {
+  padding: 2px 8px 8px 32px;
+  font-weight: 300;
+  font-style: italic;
+}
+
 .sidebar .closebtn {
   position: absolute;
-  top: 10px;
+  top: 1px;
   right: 25px;
-  font-size: 36px;
   margin-left: 50px;
+  color: #ED6A5A!important;
+  text-decoration: none;
 }
 
 .showbtn-left {
@@ -38,7 +77,7 @@ body {
   top: 45%;
   left: 25px;
   z-index: 1;
-  color: grey !important;
+  color: #ED6A5A !important;
   font-size: 1.5rem;
   transition: 0.5s;
 }
@@ -64,4 +103,38 @@ body {
   bottom: 0;
   width: 100%;
   z-index: 1;
+}
+
+/* ----------------------------------- SIDEBAR STYLING DEFAULT ------------ */
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-left: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00853e;
+  border-radius: 0;
+}
+
+.clearfix { display: block; }
+
+.clearfix::after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }

@@ -135,7 +135,7 @@ function buildLocationList(data) {
     listing.id = 'location-' + i;
 
     // Creating a link for each location with the name as text
-    var link = listing.appendChild(document.createElement('h2'));
+    var link = listing.appendChild(document.createElement('a'));
     // link.href = '#'; use this to create the link later, changing h2 to a
     link.className = 'name';
     link.dataPosition = i;
