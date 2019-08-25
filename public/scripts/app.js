@@ -1,7 +1,6 @@
 var locData = {
   "type": "FeatureCollection",
-  "features": [
-    {
+  "features": [{
       "type": "Feature",
       "geometry": {
         "type": "Point",
@@ -111,7 +110,8 @@ var locData = {
 
 // TOKEN AND CREATING MAP OBJECT
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicGFibG9hbGJpYW4iLCJhIjoiY2p6Z3kxbDh1MGxlMzNob29yaDlqNnlrcCJ9.PkehJd3-j7LfVWsjkk8OzQ';
+mapboxgl.accessToken =
+  'pk.eyJ1IjoicGFibG9hbGJpYW4iLCJhIjoiY2p6Z3kxbDh1MGxlMzNob29yaDlqNnlrcCJ9.PkehJd3-j7LfVWsjkk8OzQ';
 
 var map = new mapboxgl.Map({
   container: 'map',
@@ -120,8 +120,29 @@ var map = new mapboxgl.Map({
   zoom: 13
 });
 
-// SHOW OUR LOCATIONS LIST ON THE SIDEBAR
 
+/*
+1. all data from one point
+2. create eventListener for inputField
+3. two arrays, one with default all markers active, one reactive with user input
+
+*/
+
+var filteredArray = [];
+var inputField = document.querySelector('.input-filter');
+inputField.addEventListener('keyup', function() {
+  console.log(inputField.value);
+
+
+
+
+
+
+
+});
+
+
+// SHOW OUR LOCATIONS LIST ON THE SIDEBAR
 function buildLocationList(data) {
   // Iterating through the locations list
   for (i = 0; i < data.features.length; i++) {
@@ -135,8 +156,8 @@ function buildLocationList(data) {
     listing.id = 'location-' + i;
 
     // Creating a link for each location with the name as text
-    var link = listing.appendChild(document.createElement('h2'));
-    // link.href = '#'; use this to create the link later, changing h2 to a
+    var link = listing.appendChild(document.createElement('a'));
+    link.href = "#";
     link.className = 'name';
     link.dataPosition = i;
     link.innerHTML = prop.name;
@@ -164,4 +185,67 @@ map.on('load', function(e) {
     }
   });
   buildLocationList(locData);
+});
+
+// FLY TO PLACE
+
+if (!('remove' in Element.prototype)) {
+  Element.prototype.remove = function() {
+    if (this.parentNode) {
+      this.parentNode.removeChild(this);
+    }
+  };
+}
+
+function flyToPlace(currentFeature) {
+  map.flyTo({
+    center: currentFeature.geometry.coordinates,
+    zoom: 15
+  });
+}
+
+function createPopUp(currentFeature) {
+  var popUps = document.getElementsByClassName('mapboxgl-popup');
+  // Check if there is already a popup on the map and if so, remove it
+  if (popUps[0]) popUps[0].remove();
+
+  var popup = new mapboxgl.Popup({
+      closeOnClick: false
+    })
+    .setLngLat(currentFeature.geometry.coordinates)
+    .setHTML('<h3>' + currentFeature.properties.name + '</h3>' +
+      '<h4>' + currentFeature.properties.address + '</h4>')
+    .addTo(map);
+}
+
+// Event listener when user clicks on map
+map.on('click', function(e) {
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['locations']
+  });
+  if (features.length) {
+    var clickedPoint = features[0];
+    // Fly to the place
+    flyToPlace(clickedPoint);
+    // Close all other popups and display popup for clicked place
+    createPopUp(clickedPoint);
+    // Highlight place on sidebar
+    var activeItem = document.getElementsByClassName('active');
+    if (activeItem[0]) {
+      activeItem[0].classList.remove('active');
+    }
+
+    var selectedFeature = clickedPoint.properties.address;
+
+    for (var i = 0; i < locData.features.length; i++) {
+      if (locData.features[i].properties.address === selectedFeature) {
+        selectedFeatureIndex = i;
+      }
+    }
+
+    var listing = document.getElementById('location-' +
+      selectedFeatureIndex);
+    listing.classList.add('active');
+  }
+
 });

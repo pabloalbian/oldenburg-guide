@@ -3,6 +3,7 @@
 	<link href='https://api.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" type="text/css" href="../styles/style.css">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>@import url('https://fonts.googleapis.com/css?family=Lato:100,300,300i,400&display=swap');</style>
 </head>
 <body>
 
@@ -10,9 +11,11 @@
 
 	<div id='map'>
 		<div id="mySidebar" class="sidebar">
-			<a href="javascript:void(0)" class="closebtn" onclick="closeBar()">&times;</a>
-      <h2>What to see</h2>
-      <input type="text" placeholder="filter locations">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeBar()">close</a>
+      <h1>OLDENBURG</h1>
+      <div class="filter">
+        <input class="input-filter" type="text" placeholder="filter">
+      </div>
 			<div id="list" class="list">
         <!-- Locations list goes here -->
       </div>
