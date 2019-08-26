@@ -120,45 +120,8 @@ var map = new mapboxgl.Map({
   zoom: 13
 });
 
+// Function to show all locations on sidebar
 
-/*
-1. all data from one point
-2. create eventListener for inputField
-3. two arrays, one with default all markers active, one reactive with user input
-
-*/
-
-var inputField = document.querySelector('.input-filter');
-inputField.addEventListener('keyup', function() {
-  if (inputField.value){
-    //empty here sidebar list
-    emptyLocationList();
-
-    var filteredData = {
-       "type":"FeatureCollection",
-       "properties": []
-    }
-
-    var currentInput = inputField.value.toLowerCase();
-
-    turf.propEach(locData, function(currentProperties, featureIndex){
-      var currentName = currentProperties.name.toLowerCase();
-
-
-      console.log(currentName);
-      if(currentName.startsWith(currentInput)) {
-        filteredData.properties.push(currentProperties);
-      }
-    });
-    buildFilteredLocationList(filteredData);
-  } else {
-    emptyLocationList();
-    buildLocationList(locData);
-  }
-});
-
-
-// SHOW OUR LOCATIONS LIST ON THE SIDEBAR
 function buildLocationList(data) {
   // Iterating through the locations list
   for (i = 0; i < data.features.length; i++) {
@@ -185,6 +148,8 @@ function buildLocationList(data) {
   }
 }
 
+//Function to show filtered locations on sidebar
+
 function buildFilteredLocationList(data) {
   // Iterating through the filtered locations list
   for (i = 0; i < data.properties.length; i++) {
@@ -208,6 +173,8 @@ function buildFilteredLocationList(data) {
     address.innerHTML = prop.address;
   }
 }
+
+//Function to empty sidebar list
 
 function emptyLocationList() {
   var list = document.getElementById('list');
@@ -295,4 +262,34 @@ map.on('click', function(e) {
     listing.classList.add('active');
   }
 
+});
+
+// Event listener when we write on filter field on sidebar
+var inputField = document.querySelector('.input-filter');
+inputField.addEventListener('keyup', function() {
+  if (inputField.value){
+    //empty here sidebar list
+    emptyLocationList();
+
+    var filteredData = {
+       "type":"FeatureCollection",
+       "properties": []
+    }
+
+    var currentInput = inputField.value.toLowerCase();
+
+    turf.propEach(locData, function(currentProperties, featureIndex){
+      var currentName = currentProperties.name.toLowerCase();
+
+
+      console.log(currentName);
+      if(currentName.startsWith(currentInput)) {
+        filteredData.properties.push(currentProperties);
+      }
+    });
+    buildFilteredLocationList(filteredData);
+  } else {
+    emptyLocationList();
+    buildLocationList(locData);
+  }
 });
