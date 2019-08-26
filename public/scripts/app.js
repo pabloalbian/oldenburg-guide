@@ -128,17 +128,33 @@ var map = new mapboxgl.Map({
 
 */
 
-var filteredArray = [];
 var inputField = document.querySelector('.input-filter');
 inputField.addEventListener('keyup', function() {
-  console.log(inputField.value);
+  if (inputField.value){
+    //empty here sidebar list
+    emptyLocationList();
+
+    var filteredData = {
+       "type":"FeatureCollection",
+       "properties": []
+    }
+
+    var currentInput = inputField.value.toLowerCase();
+
+    turf.propEach(locData, function(currentProperties, featureIndex){
+      var currentName = currentProperties.name.toLowerCase();
 
 
-
-
-
-
-
+      console.log(currentName);
+      if(currentName.startsWith(currentInput)) {
+        filteredData.properties.push(currentProperties);
+      }
+    });
+    buildFilteredLocationList(filteredData);
+  } else {
+    emptyLocationList();
+    buildLocationList(locData);
+  }
 });
 
 
@@ -166,6 +182,37 @@ function buildLocationList(data) {
     var address = listing.appendChild(document.createElement('div'));
     address.className = 'address'
     address.innerHTML = prop.address;
+  }
+}
+
+function buildFilteredLocationList(data) {
+  // Iterating through the filtered locations list
+  for (i = 0; i < data.properties.length; i++) {
+    var prop = data.properties[i];
+    // Selecting the list in the sidebar and create a div for each location
+    var list = document.getElementById('list');
+    var listing = list.appendChild(document.createElement('div'));
+    listing.className = 'location';
+    listing.id = 'location-' + i;
+
+    // Creating a link for each location with the name as text
+    var link = listing.appendChild(document.createElement('a'));
+    link.href = "#";
+    link.className = 'name';
+    link.dataPosition = i;
+    link.innerHTML = prop.name;
+
+    // Creating a div for each location's address
+    var address = listing.appendChild(document.createElement('div'));
+    address.className = 'address'
+    address.innerHTML = prop.address;
+  }
+}
+
+function emptyLocationList() {
+  var list = document.getElementById('list');
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
   }
 }
 
