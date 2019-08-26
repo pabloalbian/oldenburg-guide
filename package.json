@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pabloalbian/oldenburg-guide#readme",
   "dependencies": {
+    "@turf/meta": "^6.0.2",
     "ejs": "^2.6.2",
     "express": "^4.17.1"
   }

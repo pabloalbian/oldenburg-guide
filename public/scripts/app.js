@@ -1,113 +1,3 @@
-var locData = {
-  "type": "FeatureCollection",
-  "features": [{
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.216679096221924,
-          53.13785076577429
-        ]
-      },
-      "properties": {
-        "id": "oldenburgerschloss",
-        "name": "Oldenburger Schloss",
-        "address": "Schlosspl. 1, 26122 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.198174400374683,
-          53.14739463531575
-        ]
-      },
-      "properties": {
-        "id": "botanischergarten",
-        "name": "Botanischer Garten",
-        "address": "Philosophenweg 41, 26121 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.210292117928702,
-          53.13400888772047
-        ]
-      },
-      "properties": {
-        "id": "schlossgarten",
-        "name": "Schlossgarten Oldenburg",
-        "address": "Schlossgarten Oldenburg 26122 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.219917956602103,
-          53.140405132291534
-        ]
-      },
-      "properties": {
-        "id": "hafenoldenburg",
-        "name": "Hafen Oldenburg",
-        "address": "Hafenpromenade, 26135 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.234037104856498,
-          53.1402378022538
-        ]
-      },
-      "properties": {
-        "id": "eisenbahnklappbruecke",
-        "name": "Eisenbahn-Klappbrücke",
-        "address": "Hunte, 26135 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.214723255070453,
-          53.14457530113248
-        ]
-      },
-      "properties": {
-        "id": "horstjanssenmuseum",
-        "name": "Horst-Janssen-Museum",
-        "address": "Am Stadtmuseum 4-8, 26121 Oldenburg",
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.207685138615375,
-          53.142850650770775
-        ]
-      },
-      "properties": {
-        "id": "kulturzentrumpfl",
-        "name": "Kulturzentrum PFL",
-        "address": "Peterstraße 3, 26121 Oldenburg",
-      }
-    },
-  ]
-}
-
 // TOKEN AND CREATING MAP OBJECT
 
 mapboxgl.accessToken =
@@ -120,29 +10,8 @@ var map = new mapboxgl.Map({
   zoom: 13
 });
 
+// Function to show all locations on sidebar
 
-/*
-1. all data from one point
-2. create eventListener for inputField
-3. two arrays, one with default all markers active, one reactive with user input
-
-*/
-
-var filteredArray = [];
-var inputField = document.querySelector('.input-filter');
-inputField.addEventListener('keyup', function() {
-  console.log(inputField.value);
-
-
-
-
-
-
-
-});
-
-
-// SHOW OUR LOCATIONS LIST ON THE SIDEBAR
 function buildLocationList(data) {
   // Iterating through the locations list
   for (i = 0; i < data.features.length; i++) {
@@ -162,10 +31,92 @@ function buildLocationList(data) {
     link.dataPosition = i;
     link.innerHTML = prop.name;
 
+    // Event listener for the links on sidebar
+    link.addEventListener('click', function(e) {
+      var clickedListing = data.features[this.dataPosition];
+      flyToPlace(clickedListing);
+      createPopUp(clickedListing);
+      var activeItem = document.getElementsByClassName('active');
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+      this.parentNode.classList.add('active');
+    });
+
+
+
+
     // Creating a div for each location's address
     var address = listing.appendChild(document.createElement('div'));
     address.className = 'address'
     address.innerHTML = prop.address;
+  }
+}
+
+//Function to show filtered locations on sidebar
+
+function buildFilteredLocationList(data) {
+  // Iterating through the filtered locations list
+  for (i = 0; i < data.features.length; i++) {
+    var currentFeature = data.features[i];
+    var prop = currentFeature.properties;
+    // Selecting the list in the sidebar and create a div for each location
+    var list = document.getElementById('list');
+    var listing = list.appendChild(document.createElement('div'));
+    listing.className = 'location';
+    listing.id = 'location-' + i;
+
+    // Creating a link for each location with the name as text
+    var link = listing.appendChild(document.createElement('a'));
+    link.href = "#";
+    link.className = 'name';
+    link.dataPosition = i;
+    link.innerHTML = prop.name;
+    // Event listener for the links on sidebar
+    link.addEventListener('click', function(e) {
+      var clickedListing = data.features[this.dataPosition];
+      flyToPlace(clickedListing);
+      createPopUp(clickedListing);
+      var activeItem = document.getElementsByClassName('active');
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+      this.parentNode.classList.add('active');
+    });
+
+
+    // Creating a div for each location's address
+    var address = listing.appendChild(document.createElement('div'));
+    address.className = 'address'
+    address.innerHTML = prop.address;
+  }
+}
+
+//Function to load only filtered locations on map
+
+function loadFilteredLocationsOnMap(data) {
+  map.removeLayer('locations');
+  map.removeSource('locations');
+  map.addLayer({
+    id: 'locations',
+    type: 'symbol',
+    source: {
+      type: 'geojson',
+      data: data
+    },
+    layout: {
+      'icon-image': 'viewpoint-15',
+      'icon-allow-overlap': true,
+    }
+  });
+}
+
+//Function to empty sidebar list
+
+function emptyLocationList() {
+  var list = document.getElementById('list');
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
   }
 }
 
@@ -248,4 +199,32 @@ map.on('click', function(e) {
     listing.classList.add('active');
   }
 
+});
+
+var inputField = document.querySelector('.input-filter');
+inputField.addEventListener('keyup', function() {
+  if (inputField.value){
+    //empty here sidebar list
+    var filteredData = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+    emptyLocationList();
+
+
+    var currentInput = inputField.value.toLowerCase();
+
+    turf.featureEach(locData, function(currentFeature, featureIndex){
+      var currentName = currentFeature.properties.name.toLowerCase();
+
+      if(currentName.startsWith(currentInput)) {
+        filteredData.features.push(currentFeature);
+      }
+    });
+    buildFilteredLocationList(filteredData);
+    loadFilteredLocationsOnMap(filteredData);
+  } else {
+    emptyLocationList();
+    buildLocationList(locData);
+  }
 });
