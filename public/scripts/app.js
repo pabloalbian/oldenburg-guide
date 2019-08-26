@@ -141,6 +141,21 @@ function buildLocationList(data) {
     link.dataPosition = i;
     link.innerHTML = prop.name;
 
+    // Event listener for the links on sidebar
+    link.addEventListener('click', function(e) {
+      var clickedListing = data.features[this.dataPosition];
+      flyToPlace(clickedListing);
+      createPopUp(clickedListing);
+      var activeItem = document.getElementsByClassName('active');
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+      this.parentNode.classList.add('active');
+    });
+
+
+
+
     // Creating a div for each location's address
     var address = listing.appendChild(document.createElement('div'));
     address.className = 'address'
@@ -152,8 +167,9 @@ function buildLocationList(data) {
 
 function buildFilteredLocationList(data) {
   // Iterating through the filtered locations list
-  for (i = 0; i < data.properties.length; i++) {
-    var prop = data.properties[i];
+  for (i = 0; i < data.features.length; i++) {
+    var currentFeature = data.features[i];
+    var prop = currentFeature.properties;
     // Selecting the list in the sidebar and create a div for each location
     var list = document.getElementById('list');
     var listing = list.appendChild(document.createElement('div'));
@@ -166,12 +182,43 @@ function buildFilteredLocationList(data) {
     link.className = 'name';
     link.dataPosition = i;
     link.innerHTML = prop.name;
+    // Event listener for the links on sidebar
+    link.addEventListener('click', function(e) {
+      var clickedListing = data.features[this.dataPosition];
+      flyToPlace(clickedListing);
+      createPopUp(clickedListing);
+      var activeItem = document.getElementsByClassName('active');
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+      this.parentNode.classList.add('active');
+    });
 
+    
     // Creating a div for each location's address
     var address = listing.appendChild(document.createElement('div'));
     address.className = 'address'
     address.innerHTML = prop.address;
   }
+}
+
+//Function to load only filtered locations on map
+
+function loadFilteredLocationsOnMap(data) {
+  map.removeLayer('locations');
+  map.removeSource('locations');
+  map.addLayer({
+    id: 'locations',
+    type: 'symbol',
+    source: {
+      type: 'geojson',
+      data: data
+    },
+    layout: {
+      'icon-image': 'viewpoint-15',
+      'icon-allow-overlap': true,
+    }
+  });
 }
 
 //Function to empty sidebar list
@@ -264,30 +311,28 @@ map.on('click', function(e) {
 
 });
 
-// Event listener when we write on filter field on sidebar
 var inputField = document.querySelector('.input-filter');
 inputField.addEventListener('keyup', function() {
   if (inputField.value){
     //empty here sidebar list
+    var filteredData = {
+        "type": "FeatureCollection",
+        "features": []
+    };
     emptyLocationList();
 
-    var filteredData = {
-       "type":"FeatureCollection",
-       "properties": []
-    }
 
     var currentInput = inputField.value.toLowerCase();
 
-    turf.propEach(locData, function(currentProperties, featureIndex){
-      var currentName = currentProperties.name.toLowerCase();
+    turf.featureEach(locData, function(currentFeature, featureIndex){
+      var currentName = currentFeature.properties.name.toLowerCase();
 
-
-      console.log(currentName);
       if(currentName.startsWith(currentInput)) {
-        filteredData.properties.push(currentProperties);
+        filteredData.features.push(currentFeature);
       }
     });
     buildFilteredLocationList(filteredData);
+    loadFilteredLocationsOnMap(filteredData);
   } else {
     emptyLocationList();
     buildLocationList(locData);
