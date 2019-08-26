@@ -1,7 +1,6 @@
-var locData = {
+locData = {
   "type": "FeatureCollection",
-  "features": [
-    {
+  "features": [{
       "type": "Feature",
       "geometry": {
         "type": "Point",
