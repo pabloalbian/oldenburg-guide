@@ -231,6 +231,7 @@ inputField.addEventListener('keyup', function() {
   } else {
     //If sidebar has no value, we load the default data again on map and sidebar
     emptyLocationList();
+    buildLocationList(locData);
     loadFilteredLocationsOnMap(locData)
   }
 });
