@@ -11,7 +11,7 @@ This interactive map shows you the best places to visit in Oldenburg, Germany. I
 a small project that makes use of Mapbox API and it's required to be part of Chingu's
 Voyage 11.
 
-[More about Chingu](https://chingu.io/)
+[More about Chingu](https://chingu.io/)  
 [More about Mapbox API](https://docs.mapbox.com/api/)
 
 ## Getting Started
