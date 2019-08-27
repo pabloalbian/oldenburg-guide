@@ -143,11 +143,14 @@ body {
 /* POPU MARKERS */
 
 .mapboxgl-popup-close-button {
-  display: none;
+  font-size: 25px;
+  color: #ED6A5A;
+  position: absolute;
+  margin: 0;
 }
 
 .mapboxgl-popup-content {
-  font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+  font: 400 15px/22px 'Lato', sans-serif;
   padding: 0;
   width: 180px;
 }
@@ -160,8 +163,7 @@ body {
   background: #5F6F87;
   color: #fff;
   margin: 0;
-  display: block;
-  padding: 10px;
+  padding: 16px 22px 16px 16px;
   border-radius: 3px 3px 0 0;
   font-weight: 700;
   margin-top: -15px;
@@ -171,7 +173,7 @@ body {
   margin: 0;
   display: block;
   padding: 10px;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .mapboxgl-popup-content div {
