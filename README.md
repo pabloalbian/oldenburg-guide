@@ -8,7 +8,7 @@ In order to run this webapp, you should have Node installed in your environment 
 
 Initialise app with:
 ```
-node app.js
+node index.js
 ```
 
 The website will run under [localhost:8080](localhost:8080)
