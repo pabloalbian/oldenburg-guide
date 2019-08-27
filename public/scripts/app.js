@@ -92,7 +92,7 @@ function buildFilteredLocationList(data) {
   }
 }
 
-//Function to load only filtered locations on map
+//Function to load locations on map
 
 function loadFilteredLocationsOnMap(data) {
   map.removeLayer('locations');
@@ -165,11 +165,12 @@ function createPopUp(currentFeature) {
     })
     .setLngLat(currentFeature.geometry.coordinates)
     .setHTML('<h3>' + currentFeature.properties.name + '</h3>' +
-      '<h4>' + currentFeature.properties.address + '</h4>')
+    '<h4>' + currentFeature.properties.address + '</h4>')
     .addTo(map);
 }
 
-// Event listener when user clicks on map
+// Event listener when user clicks on a marker
+
 map.on('click', function(e) {
   var features = map.queryRenderedFeatures(e.point, {
     layers: ['locations']
@@ -201,6 +202,8 @@ map.on('click', function(e) {
 
 });
 
+//Event listener on sidebar filter
+
 var inputField = document.querySelector('.input-filter');
 inputField.addEventListener('keyup', function() {
   if (inputField.value){
@@ -214,6 +217,7 @@ inputField.addEventListener('keyup', function() {
 
     var currentInput = inputField.value.toLowerCase();
 
+    //We compare each location with the value on the textfield
     turf.featureEach(locData, function(currentFeature, featureIndex){
       var currentName = currentFeature.properties.name.toLowerCase();
 
@@ -221,10 +225,13 @@ inputField.addEventListener('keyup', function() {
         filteredData.features.push(currentFeature);
       }
     });
+    //With the results, we fill again our map and sidebar
     buildFilteredLocationList(filteredData);
     loadFilteredLocationsOnMap(filteredData);
   } else {
+    //If sidebar has no value, we load the default data again on map and sidebar
     emptyLocationList();
     buildLocationList(locData);
+    loadFilteredLocationsOnMap(locData)
   }
 });
